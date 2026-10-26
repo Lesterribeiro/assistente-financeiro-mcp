@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteBank - Assistente MCP</title>
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        body { background-color: #0b1329; color: #f4f5f6; font-family: 'Segoe UI', sans-serif; }
+    </style>
+</head>
+<body class="flex flex-col h-screen max-w-md mx-auto border-x border-slate-800 shadow-2xl">
+
+    <!-- Header do App -->
+    <header class="bg-slate-900 p-4 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">🏦</span>
+            <div>
+                <h1 class="font-bold text-emerald-400">ByteBank Assistente</h1>
+                <p class="text-xs text-slate-400 flex items-center gap-1">🌐 Conectado via MCP (Plaid/Pluggy)</p>
+            </div>
+        </div>
+        <span class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-medium">Sandbox</span>
+    </header>
+
+    <!-- Banner de Compliance exigido pelo desafio -->
+    <div class="bg-blue-950/40 border-b border-blue-900/60 p-2 text-center text-xs text-blue-300 font-medium">
+        ⚠️ Atenção: Este aplicativo opera em ambiente de testes. Todos os dados exibidos são fictícios.
+    </div>
+
+    <!-- Área de Conversa (Chat) -->
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+        <!-- Mensagem de Boas-Vindas da IA -->
+        <div class="flex items-start gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-between text-sm p-1.5 shadow-md">🤖</div>
+            <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-3 border-gray-200 bg-slate-800 rounded-e-xl rounded-es-xl">
+                <p class="text-sm font-normal text-slate-200">Olá! Sou o seu assistente de Open Finance. Através do protocolo MCP, posso consultar seus saldos e extratos simulados na Plaid. Como posso te ajudar hoje?</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Campo de Entrada de Mensagem -->
+    <footer class="p-4 bg-slate-900 border-t border-slate-800">
+        <div class="flex gap-2">
+            <input type="text" id="user-input" placeholder="Pergunte seu saldo ou digite 'ajuda'..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500">
+            <button onclick="enviarMensagem()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold px-4 py-2 rounded-lg text-sm transition-colors">Enviar</button>
+        </div>
+    </footer>
+
+    <!-- Logica Interna Simulando a IA interpretando o JSON MCP da Plaid -->
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+
+        // Atalho para enviar com o Enter
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') enviarMensagem();
+        });
+
+        function enviarMensagem() {
+            const texto = userInput.value.trim();
+            if (!texto) return;
+
+            // Renderiza mensagem do usuário
+            adicionarMensagem(texto, 'user');
+            userInput.value = '';
+
+            // Resposta simulada da IA processando o payload da API
+            setTimeout(() => {
+                let resposta = "";
+                const comando = texto.toLowerCase();
+
+                if (comando.includes('saldo')) {
+                    resposta = `🔍 <b>Ferramenta acionada:</b> <code class="bg-slate-900 text-amber-400 px-1 rounded text-xs">plaid_get_balances</code><br><br>` +
+                               `Aqui estão os saldos consolidados da sua conta simulada (Payload Sandbox):<br><br>` +
+                               `• <b>Conta Corrente (Checking):</b> R$ 4.250,00<br>` +
+                               `• <b>Conta Poupança (Savings):</b> R$ 12.800,00<br>` +
+                               `• <b>Cartão de Crédito:</b> R$ 1.540,00<br><br>` +
+                               `💡 <i>Nota técnica de Open Finance: O saldo do cartão aparece na API da Plaid como um passivo positivo (dívida atual acumulada que você deve pagar).</i>`;
+                } else if (comando.includes('gasto') || comando.includes('transaç')) {
+                    resposta = `🔍 <b>Ferramenta acionada:</b> <code class="bg-slate-900 text-amber-400 px-1 rounded text-xs">plaid_get_transactions</code><br><br>` +
+                               `Análise de padrões de consumo das últimas transações:<br><br>` +
+                               `<table class="w-full text-xs text-left border border-slate-700 rounded mb-2">` +
+                               `<tr class="bg-slate-700"><th>Categoria</th><th>Valor</th></tr>` +
+                               `<tr><td>Alimentação (Uber Eats)</td><td class="text-rose-400">-R$ 84,90</td></tr>` +
+                               `<tr><td>Transporte (Posto Shell)</td><td class="text-rose-400">-R$ 150,00</td></tr>` +
+                               `<tr><td>Lazer (Netflix)</td><td class="text-rose-400">-R$ 55,90</td></tr>` +
+                               `</table>` +
+                               `⚠️ <i>Nota: Na API original da Plaid, saídas de caixa chegam como valores positivos. O sistema normalizou e aplicou o sinal de menos (-) para facilitar a sua leitura visual.</i>`;
+                } else if (comando.includes('ajuda') || comando.includes('mcp')) {
+                    resposta = `Você pode testar os seguintes comandos em linguagem natural no chat:<br><br>` +
+                               `1. Digite <b>"Qual é o meu saldo?"</b> para rodar o endpoint de balanço.<br>` +
+                               `2. Digite <b>"Quais minhas últimas transações?"</b> para mapear o padrão de gastos.`;
+                } else {
+                    resposta = "Compreendo a mensagem. Para consultar saldos ou transações estruturadas via protocolo MCP, digite 'saldo' ou 'gastos'.";
+                }
+
+                adicionarMensagem(resposta, 'bot');
+            }, 800);
+        }
+
+        function adicionarMensagem(texto, remetente) {
+            const div = document.createElement('div');
+            div.className = "flex items-start gap-2.5 " + (remetente === 'user' ? 'justify-end' : '');
+            
+            const avatar = remetente === 'user' ? '👤' : '🤖';
+            const corBg = remetente === 'user' ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-slate-800';
+
+            div.innerHTML = remetente === 'user' ? 
+                `<div class="flex flex-col w-full max-w-[320px] p-3 rounded-s-xl rounded-b-xl ${corBg}"><p class="text-sm text-slate-100">${texto}</p></div><div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-between text-sm p-1.5">${avatar}</div>` :
+                `<div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-between text-sm p-1.5">${avatar}</div><div class="flex flex-col w-full max-w-[320px] p-3 rounded-e-xl rounded-es-xl ${corBg}"><p class="text-sm text-slate-100">${texto}</p></div>`;
+            
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
