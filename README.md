@@ -31,7 +31,7 @@ O payload retorna para a IA, que interpreta os dados matemáticos e traduz a res
 * **Tratamento de Sinais da Plaid:** Nativamente em APIs financeiras internacionais, as saídas de caixa (gastos) são tratadas como números positivos. O motor de dados do aplicativo inverteu esse sinal, aplicando a máscara de subtração (- R$) na tela para se alinhar ao padrão de leitura brasileiro.
 * **A Linha de Crédito como Passivo:** O saldo do cartão de crédito aparece como um valor positivo na API porque o protocolo mapeia a conta sob a categoria de *Passivo/Dívida* (liability). O número representa o balanço real de obrigações financeiras acumuladas pelo titular que deverão ser quitadas no vencimento da fatura.
 
-### ⚙️ 3. Parametrização dos Servidores MCP
+### Parametrização dos Servidores MCP
 
 Para reprodução em ambiente de desenvolvimento, o arquivo de configuração de protocolo MCP (mcp_config.json) deve ser parametrizado com a seguinte estrutura de servidores: 
 
