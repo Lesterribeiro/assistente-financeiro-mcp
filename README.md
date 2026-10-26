@@ -61,3 +61,6 @@ json
 Baixe os arquivos deste repositório na sua máquina.
 Dê um duplo clique diretamente no arquivo index.html para executá-lo instantaneamente no seu navegador de internet.
 Digite **"saldo"** ou **"gastos"** no campo do chat para testar a inteligência de processamento de dados e as respostas estruturadas via MCP.
+
+* **URL do Aplicativo:** https://github.io
+
