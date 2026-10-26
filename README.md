@@ -56,8 +56,6 @@ json
   }
 }
 
-Use o código com cuidado.
-
 ### Como Executar o Web App
 
 Baixe os arquivos deste repositório na sua máquina.
